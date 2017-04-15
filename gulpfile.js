@@ -7,7 +7,7 @@ const env = require('gulp-env');
 gulp.task('test', function() {
     env({ vars: { NODE_ENV: 'test' } });
     return gulp
-            .src('test/**/*.js')
+            .src('tests/**/*.js')
             .pipe(mocha());
 });
 
