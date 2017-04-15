@@ -1,6 +1,6 @@
-$(function() {
-    //'use strict';
+'use strict';
 
+$(function() {
     var word = $('#word');
     var length = word.data('length');
 

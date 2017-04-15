@@ -4,6 +4,7 @@ const gulp = require('gulp');
 const mocha = require('gulp-mocha');
 const env = require('gulp-env');
 const eslint = require('gulp-eslint');
+const istanbul = require('gulp-istanbul');
 
 gulp.task('test', ['lint-test'], function() {
     env({ vars: { NODE_ENV: 'test' } });
