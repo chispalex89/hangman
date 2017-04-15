@@ -17,9 +17,9 @@ router.post('/', function(req, res, next){
     let  word = req.body.word;
     if(word && /^[A-Za-z]{3,}$/.test(word)) {
         const game = service.create(req.user.id, word);
-        res.redirect(`/games/${game.id}/created`)
+        res.redirect(`/games/${game.id}/created`);
     } else {
-        res.status(400).send('Word must be at least three characters long and contain only letters')
+        res.status(400).send('Word must be at least three characters long and contain only letters');
     }
 });
 
@@ -62,7 +62,7 @@ router.delete('/:id', function(req, res, next){
                     game.remove();
                     res.send();
                 } else {
-                    res.status(403).send("You don't have permission to delete this game");
+                    res.status(403).send('You don\'t have permission to delete this game');
                 }
         }
     );
