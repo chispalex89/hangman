@@ -5,6 +5,7 @@ const mocha = require('gulp-mocha');
 const env = require('gulp-env');
 const eslint = require('gulp-eslint');
 const istanbul = require('gulp-istanbul');
+const shell = require('gulp-shell');
 
 gulp.task('test', ['lint-test', 'instrument'], function() {
     env({ vars: { NODE_ENV: 'test' } });
@@ -13,7 +14,12 @@ gulp.task('test', ['lint-test', 'instrument'], function() {
             .pipe(mocha())
             .pipe(istanbul.writeReports())
             .pipe(istanbul.enforceThresholds({
-                thresholds: { global : 90 }
+                thresholds: { 
+                    global: {
+                        statements: 70,
+                        branches: 50
+                    }
+                }
             }));
 });
 
@@ -64,8 +70,20 @@ gulp.task('instrument', function() {
             .pipe(istanbul.hookRequire())
 });
 
-gulp.task('lint', [
-    'lint-server', 'lint-client', 'lint-test', 'lint-integration-tests'
-]);
+gulp.task('integration-test', ['lint-integration-tests', 'test'], (done) => {
+    const TEST_PORT = 5000;
+    let server = require('http')
+                    .createServer(require('./src/app.js'))
+                    .listen(TEST_PORT, function() {
+                        gulp
+                            .src('integration-tests/**/*.js')
+                            .pipe(shell('node node_modules/phantomjs-prebuilt/bin/phantomjs <%=file.path%>', {
+                                env: { 'TEST_PORT': TEST_PORT }
+                            }))
+                            .on('error', () => server.close(done))
+                            .on('end', () => server.close(done))
+                    });
+});
 
+gulp.task('lint', ['lint-server', 'lint-client', 'lint-test', 'lint-integration-tests']);
 gulp.task('default', ['lint', 'test']);
