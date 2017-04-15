@@ -53,7 +53,7 @@ gulp.task('lint-integration-tests', function() {
 });
 
 gulp.task('lint', [
-    'lint-server', 'lint-client', 'lint-test', 'lint-integration-test'
+    'lint-server', 'lint-client', 'lint-test', 'lint-integration-tests'
 ]);
 
 gulp.task('default', ['lint', 'test']);
